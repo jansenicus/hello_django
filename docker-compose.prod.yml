@@ -1,0 +1,52 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: app/Dockerfile.prod
+    command: gunicorn core.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/usr/src/app/staticfiles
+      - media_volume:/usr/src/app/mediafiles
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env.production
+    depends_on:
+      - db
+    networks:
+      - hello_django_network
+
+  db:
+    image: postgres:17
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env.production
+    networks:
+      - hello_django_network
+
+  nginx:
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile
+    volumes:
+      - static_volume:/usr/src/app/staticfiles
+      - media_volume:/usr/src/app/mediafiles
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+
+    ports:
+      - 80:80
+    depends_on:
+      - web
+    networks:
+      - hello_django_network
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+
+networks:
+  hello_django_network:
+    driver: bridge
+
