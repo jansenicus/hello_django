@@ -1,0 +1,35 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Django-specific
+db.sqlite3
+mediafiles/
+staticfiles/
+
+# Environment and secrets
+.env*
+*.pem
+*.key
+
+# Docker and Git
+Dockerfile*
+.dockerignore
+.git
+.gitignore
+
+# OS and editor junk
+*.swp
+*.swo
+*.DS_Store
+*.vscode/
+*.idea/
+
+# Node (if using frontend assets)
+node_modules/
+*.log
